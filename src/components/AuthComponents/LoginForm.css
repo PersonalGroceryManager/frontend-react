@@ -1,0 +1,13 @@
+.warning {
+  border-width: 2px;
+  border-radius: 0.5rem;
+  background: firebrick;
+  color: #fff;
+  padding: 1rem;
+}
+
+/* Position any warnings offscreen */
+.offscreen {
+  position: absolute;
+  left: -9999px;
+}
