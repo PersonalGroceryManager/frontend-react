@@ -1,12 +1,12 @@
 import { useEffect, useContext, useState } from "react";
-import { GroupContext } from "../contexts/GroupContext";
+import { GroupContext } from "../../contexts/GroupContext";
 import {
   ReceiptInfo,
   deleteReceiptFromGroup,
   fetchReceiptsInGroup,
-} from "../services/receiptService";
+} from "../../services/receiptService";
 import ReceiptInfoCard from "./ReceiptInfoCard";
-import { ReceiptContext } from "../contexts/ReceiptContext";
+import { ReceiptContext } from "../../contexts/ReceiptContext";
 
 function ReceiptSelector() {
   // Use context API to access selected group

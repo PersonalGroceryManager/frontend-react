@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { joinGroup } from "../../services/groupService";
 
-function GroupJoinerForm() {
+/**
+ * React component rendering a form to join groups
+ *
+ * @prop onGroupJoin: Function to be executed whenever a group is successfully joined
+ * @returns
+ */
+function GroupJoinerForm({ onGroupJoin }: { onGroupJoin: () => void }) {
   const statusIndicator = useRef<HTMLParagraphElement | null>(null);
   const [groupName, setGroupName] = useState<string | null>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -16,7 +22,9 @@ function GroupJoinerForm() {
     setIsLoading(true);
     const status = await joinGroup(groupName);
 
-    if (!status) {
+    if (status) {
+      onGroupJoin();
+    } else {
       statusIndicator.current?.classList.remove("offscreen");
       statusIndicator.current?.classList.add("warning");
     }
@@ -52,7 +60,7 @@ function GroupJoinerForm() {
             type="submit"
             onClick={handleSubmit}
             className="btn btn-primary mb-3"
-            disabled={!groupName}
+            disabled={!groupName || isLoading}
           >
             {isLoading ? (
               <>

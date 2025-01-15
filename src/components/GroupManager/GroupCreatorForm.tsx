@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { createGroup, joinGroup } from "../../services/groupService";
 
-function GroupCreatorForm() {
+/**
+ * REACT COMPONENT
+ *
+ * A component that renders a form to create a new group.
+ * @prop onGroupAdded: Function to be executed whenever a group is
+ *                     successfully added. For example, insert a function
+ *
+ * @returns
+ */
+function GroupCreatorForm({ onGroupAdded }: { onGroupAdded: () => void }) {
   const statusIndicator = useRef<HTMLParagraphElement | null>(null);
   const [groupName, setGroupName] = useState<string | null>("");
   const [groupDescription, setGroupDescription] = useState<string | null>("");
@@ -24,9 +33,10 @@ function GroupCreatorForm() {
 
     setIsLoading(false);
 
-    // Join the group if successful
+    // If successful, join the group. Reload the page to update
     if (status) {
       await joinGroup(groupName);
+      onGroupAdded();
     }
   };
 
@@ -38,33 +48,31 @@ function GroupCreatorForm() {
 
   return (
     <>
-      <form className="row">
-        <div className="col-auto">
-          <div className="form-floating mb-3">
-            <input
-              type="text"
-              className="form-control"
-              id="groupNameToCreate"
-              placeholder="Group Name"
-              onChange={(e) => {
-                setGroupName(e.target.value);
-              }}
-            />
-            <label htmlFor="groupNameToJoin">Group Name</label>
-          </div>
+      <form className="container">
+        <div className="form-floating mb-3 col-auto">
+          <input
+            type="text"
+            className="form-control"
+            id="groupNameToCreate"
+            placeholder="Group Name"
+            onChange={(e) => {
+              setGroupName(e.target.value);
+            }}
+          />
+          <label htmlFor="groupNameToJoin">Group Name</label>
+        </div>
 
-          <div className="form-floating mb-3">
-            <input
-              type="text"
-              className="form-control"
-              id="groupDescriptionToCreate"
-              placeholder="Description"
-              onChange={(e) => {
-                setGroupDescription(e.target.value);
-              }}
-            />
-            <label htmlFor="groupNameToCreate">Description</label>
-          </div>
+        <div className="form-floating mb-3 col-auto">
+          <input
+            type="text"
+            className="form-control"
+            id="groupDescriptionToCreate"
+            placeholder="Description"
+            onChange={(e) => {
+              setGroupDescription(e.target.value);
+            }}
+          />
+          <label htmlFor="groupNameToCreate">Description</label>
         </div>
 
         <div className="col-auto">

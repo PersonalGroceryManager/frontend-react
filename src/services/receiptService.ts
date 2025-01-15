@@ -1,3 +1,6 @@
+import { getUserIDFromName } from "./authService";
+import { getGroupIDForName } from "./groupService";
+
 const API_BASE_URL = "http://localhost:5000";
 
 export interface ReceiptInfo {
@@ -14,49 +17,18 @@ export interface ItemInfo {
   quantity: number;
   weight: number;
   price: number;
+  // Key value pair to store user and quantity information
+  [key: string]: number | string;
 }
 
-/**
- * Given a group name, obtain its corresponding group ID. Return 0 if no group
- * with the name exists.
- *
- * @param {string} groupName -The group name to search for.
- * @returns
- */
-async function resolveGroupName(groupName: string): Promise<number> {
-  try {
-    const request = new Request(API_BASE_URL + "/groups/resolve/" + groupName, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const response = await fetch(request);
-    console.log("Resolve group name response: " + String(response.status));
-
-    if (!response.ok) {
-      throw new Error("Group name resolution failed.");
-    }
-
-    console.log("Group name resolution successful.");
-    const data = await response.json();
-
-    // Response data validation
-    if (
-      !data ||
-      typeof data !== "object" ||
-      !("group_id" in data) ||
-      !Number.isInteger(data["group_id"])
-    ) {
-      throw new Error(
-        "Invalid response format: 'group_id' missing or malformed"
-      );
-    }
-
-    return data["group_id"];
-  } catch (error) {
-    console.log(error);
-    return 0;
-  }
+export interface UserItemInfo {
+  user_id: number;
+  item_id: number;
+  unit: number;
+  item_name?: string;
+  quantity?: number;
+  weight?: number;
+  price?: number;
 }
 
 /**
@@ -68,7 +40,7 @@ async function resolveGroupName(groupName: string): Promise<number> {
 export const fetchReceiptsInGroup = async (
   groupName: string
 ): Promise<ReceiptInfo[] | []> => {
-  const group_id = await resolveGroupName(groupName);
+  const group_id = await getGroupIDForName(groupName);
 
   try {
     if (!group_id) {
@@ -117,7 +89,6 @@ export const fetchItemsInReceipts = async (receiptID: number) => {
 
     // Data parsing and validatiion
     const itemInfo: ItemInfo[] = await response.json();
-    console.log(itemInfo);
     if (!itemInfo || !Array.isArray(itemInfo)) {
       throw new Error(
         "Attempt to fetch items failed because data not arranged as an array."
@@ -128,6 +99,40 @@ export const fetchItemsInReceipts = async (receiptID: number) => {
     console.log("Fetch item failed. " + String(error));
   }
 };
+
+export async function fetchUserItemsInReceipt(
+  receiptID: number
+): Promise<UserItemInfo[] | null> {
+  const request = new Request(
+    `${API_BASE_URL}/receipts/user-items/${receiptID}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
+  try {
+    const response = await fetch(request);
+    if (!response.ok) throw new Error("");
+    const userItemInfo = await response.json();
+
+    if (!userItemInfo) {
+      throw new Error("");
+    }
+
+    // Check if there are any user item information
+    if (userItemInfo == undefined || userItemInfo.length == 0) {
+      console.log("No user data exists.");
+    }
+
+    return userItemInfo;
+  } catch (error) {
+    console.log("Fetching users and item associations failed.");
+    return null;
+  }
+}
 
 /**
  * Upload a receipt to a group. Return True if success, False if failed.
@@ -179,5 +184,78 @@ export const deleteReceiptFromGroup = async (
     return false;
   }
 
+  return true;
+};
+
+export const addUserToReceipt = async (
+  receiptID: number,
+  username: string
+): Promise<boolean> => {
+  // Convert username to its ID
+  const userID = await getUserIDFromName(username);
+  if (userID == null) {
+    return false;
+  }
+
+  const request = new Request(
+    `${API_BASE_URL}/receipts/${receiptID}/users/${userID}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    }
+  );
+
+  const response = await fetch(request);
+
+  if (!response.ok) {
+    console.log(
+      `Failed to add user "${username}" to receipt ID: ${receiptID}.`
+    );
+    return false;
+  }
+
+  return true;
+};
+
+export const updateUserItemQuanitity = async (
+  dataModel: UserItemInfo[]
+): Promise<boolean> => {
+  const request = new Request(`${API_BASE_URL}/receipts/user-items`, {
+    method: "PUT",
+    body: JSON.stringify(dataModel),
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const response = await fetch(request);
+
+  if (!response.ok) {
+    console.log("Failed to update user item quantity.");
+    return false;
+  }
+  console.log("Successfully updated user item quantity.");
+  return true;
+};
+
+export const updateUserCost = async (
+  userCost: {
+    user_id: number;
+    receipt_id: number;
+    cost: number | string;
+  }[]
+): Promise<boolean> => {
+  const request = new Request(`${API_BASE_URL}/users/costs`, {
+    method: "PUT",
+    body: JSON.stringify(userCost),
+    headers: { "Content-Type": "application/json" },
+  });
+
+  const response = await fetch(request);
+
+  if (!response.ok) {
+    console.log("Failed to update user costs.");
+    return false;
+  }
+
+  console.log("Successfully updated user costs.");
   return true;
 };

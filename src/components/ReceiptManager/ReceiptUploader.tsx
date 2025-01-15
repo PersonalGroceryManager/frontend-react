@@ -2,15 +2,13 @@
  * This component relies on groupContext and receiptContext
  */
 
-import { SetStateAction, useContext } from "react";
-import { GroupContext } from "../contexts/GroupContext";
+import { SetStateAction } from "react";
 import {
   fetchReceiptsInGroup,
   ReceiptInfo,
   uploadReceiptToGroup,
-} from "../services/receiptService";
-import { getGroupIDForName } from "../services/groupService";
-import { ReceiptContext } from "../contexts/ReceiptContext";
+} from "../../services/receiptService";
+import { getGroupIDForName } from "../../services/groupService";
 
 function ReceiptUploader({
   selectedGroupName,

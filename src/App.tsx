@@ -40,7 +40,10 @@ function App() {
             />
 
             <Route path="/login" element={<Login />} />
-            <Route path="/receipts" element={<ReceiptsPage />} />
+            <Route
+              path="/receipts"
+              element={<ProtectedRoute element={<ReceiptsPage />} />}
+            />
             <Route path="/register" element={<Register />} />
           </Routes>
         </main>

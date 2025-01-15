@@ -123,3 +123,87 @@ export const isAuthenticated = () => {
 export const logout = () => {
   localStorage.removeItem("access_token");
 };
+
+// Function to convert a username to its ID
+export const getUserIDFromName = async (
+  username: string
+): Promise<number | null> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/resolve/${username}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+      console.error(
+        `Failed to resolve username ${username}:`,
+        response.statusText
+      );
+      return null;
+    }
+
+    const data = await response.json(); // Assuming API returns a JSON response
+    if (!data || typeof data.user_id !== "number") {
+      console.error("Invalid response format:", data);
+      return null;
+    }
+
+    return data.user_id;
+  } catch (error) {
+    console.error("Error resolving username to user ID:", error);
+    return null;
+  }
+};
+
+// Function to convert a user ID to its username
+export const getUsernameFromID = async (
+  userID: number
+): Promise<string | null> => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/resolve/${userID}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    if (!response.ok) {
+      console.error(
+        `Failed to resolve user ID ${userID}:`,
+        response.statusText
+      );
+      return null;
+    }
+
+    const data = await response.json(); // Assuming API returns a JSON response
+    if (!data || typeof data.username !== "string") {
+      console.error("Invalid response format:", data);
+      return null;
+    }
+
+    return data.username;
+  } catch (error) {
+    console.error("Error resolving username to user ID:", error);
+    return null;
+  }
+};
+
+// Function to fetch user spending
+export const getUserSpending = async (): Promise<[Date[], number[]] | null> => {
+  const request = new Request(API_BASE_URL + "/users/costs", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${getToken()}`,
+      "Content-Type": "application/json",
+    },
+  });
+  const response = await fetch(request);
+  if (!response.ok) {
+    return null;
+  }
+
+  const data: { receipt_id: number; slot_time: string; cost: number }[] =
+    await response.json();
+  const date = data.map((obj) => new Date(obj.slot_time));
+  const cost = data.map((obj) => obj.cost);
+
+  return [date, cost];
+};

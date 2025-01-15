@@ -1,70 +1,13 @@
-import React, {
-  useState,
-  useEffect,
-  SetStateAction,
-  createContext,
-} from "react";
-import GroupSelectionDropdown from "../components/GroupSelectionDropdown/GroupSelectionDropdown";
-import ReceiptEditor from "../components/ReceiptEditor";
-import ReceiptSelector from "../components/ReceiptSelector";
-import ReceiptUploader from "../components/ReceiptUploader";
-import ReceiptInfoCard from "../components/ReceiptInfoCard";
-import { GroupContextProvider } from "../contexts/GroupContext";
-import { ReceiptContextProvider } from "../contexts/ReceiptContext";
+import React, { useState, useEffect, SetStateAction } from "react";
+import ReceiptEditor from "../components/ReceiptManager/ReceiptEditor";
+import ReceiptUploader from "../components/ReceiptManager/ReceiptUploader";
+import ReceiptInfoCard from "../components/ReceiptManager/ReceiptInfoCard";
 import {
   deleteReceiptFromGroup,
   fetchReceiptsInGroup,
   ReceiptInfo,
 } from "../services/receiptService";
 import { getGroupsJoinedByUser } from "../services/groupService";
-
-// interface ReceiptPageContextType {
-//   groupNames: string[] | [];
-//   setGroupNames: React.Dispatch<React.SetStateAction<string[] | []>>;
-//   selectedGroupName: string;
-//   setSelectedGroupName: React.Dispatch<React.SetStateAction<string>>;
-//   receiptInfo: ReceiptInfo[];
-//   setReceiptInfo: React.Dispatch<React.SetStateAction<ReceiptInfo[]>>;
-//   selectedReceiptID: number;
-//   setSelectedReceiptID: React.Dispatch<React.SetStateAction<number>>;
-//   groupsLoaded: boolean;
-//   setGroupsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
-//   receiptsLoaded: boolean;
-//   setReceiptsLoaded: React.Dispatch<React.SetStateAction<boolean>>;
-// }
-
-// const ReceiptPageContext = React.createContext<ReceiptPageContextType | null>(null);
-
-// function ReceiptPageContextProvider(props: React.PropsWithChildren) {
-//   const [groupNames, setGroupNames] = useState<string[] | []>([]);
-//   const [selectedGroupName, setSelectedGroupName] = useState<string>("");
-//   const [receiptInfo, setReceiptInfo] = useState<ReceiptInfo[]>([]);
-//   const [selectedReceiptID, setSelectedReceiptID] = useState<number>(0);
-//   const [groupsLoaded, setGroupsLoaded] = useState<boolean>(false);
-//   const [receiptsLoaded, setReceiptsLoaded] = useState<boolean>(false);
-
-//   const value: ReceiptPageContextType = {
-//     groupNames,
-//     setGroupNames,
-//     selectedGroupName,
-//     setSelectedGroupName,
-//     receiptInfo,
-//     setReceiptInfo,
-//     selectedReceiptID,
-//     setSelectedReceiptID,
-//     groupsLoaded,
-//     setGroupsLoaded,
-//     receiptsLoaded,
-//     setReceiptsLoaded,
-//   };
-
-//   // Return a component that can access group name via `value` attribute
-//   return (
-//     <ReceiptPageContext.Provider value={value}>
-//       {props.children}
-//     </ReceiptPageContext.Provider>
-//   );
-// }
 
 function ReceiptsPage() {
   // State to store all available group names
@@ -85,40 +28,37 @@ function ReceiptsPage() {
 
   return (
     <div className="row m-2">
-      <GroupContextProvider>
-        <ReceiptContextProvider>
-          <div className="col-2">
-            {/* <GroupSelectionDropdown /> */}
-            <GroupSelector
-              groupNames={groupNames}
-              setGroupNames={setGroupNames}
-              setSelectedGroupName={setSelectedGroupName}
-              groupLoaded={groupLoaded}
-              setGroupLoaded={setGroupLoaded}
-              setSelectedReceiptID={setSelectedReceiptID}
-            />
+      <div className="col-2">
+        <GroupSelector
+          groupNames={groupNames}
+          setGroupNames={setGroupNames}
+          setSelectedGroupName={setSelectedGroupName}
+          groupLoaded={groupLoaded}
+          setGroupLoaded={setGroupLoaded}
+          setSelectedReceiptID={setSelectedReceiptID}
+        />
 
-            {/* <ReceiptSelector /> */}
-            <ReceiptList
-              selectedGroupName={selectedGroupName}
-              receiptInfo={receiptInfo}
-              setReceiptInfo={setReceiptInfo}
-              groupLoaded={groupLoaded}
-              receiptLoaded={receiptLoaded}
-              setReceiptLoaded={setReceiptLoaded}
-              setSelectedReceiptID={setSelectedReceiptID}
-            />
-            <ReceiptUploader
-              selectedGroupName={selectedGroupName}
-              setReceiptLoaded={setReceiptLoaded}
-              setReceiptInfo={setReceiptInfo}
-            />
-          </div>
-          <div className="col-10">
-            <ReceiptEditor selectedReceiptID={selectedReceiptID} />
-          </div>
-        </ReceiptContextProvider>
-      </GroupContextProvider>
+        <ReceiptList
+          selectedGroupName={selectedGroupName}
+          receiptInfo={receiptInfo}
+          setReceiptInfo={setReceiptInfo}
+          groupLoaded={groupLoaded}
+          receiptLoaded={receiptLoaded}
+          setReceiptLoaded={setReceiptLoaded}
+          setSelectedReceiptID={setSelectedReceiptID}
+        />
+        <ReceiptUploader
+          selectedGroupName={selectedGroupName}
+          setReceiptLoaded={setReceiptLoaded}
+          setReceiptInfo={setReceiptInfo}
+        />
+      </div>
+      <div className="col-10">
+        <ReceiptEditor
+          selectedReceiptID={selectedReceiptID}
+          selectedGroupName={selectedGroupName}
+        />
+      </div>
     </div>
   );
 }
@@ -156,13 +96,11 @@ function GroupSelector({
   if (!groupLoaded) {
     return (
       <>
-        <span
-          className="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        {" " /* For spacing */}
-        Loading...
+        <div className="text-center">
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        </div>
       </>
     );
   }
@@ -274,14 +212,11 @@ function ReceiptList({
   // When groups or receipts are loading
   if (!groupLoaded || !receiptLoaded) {
     return (
-      <>
-        <span
-          className="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-        ></span>
-        Loading...
-      </>
+      <div className="text-center mt-3">
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
     );
   }
 
