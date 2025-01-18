@@ -9,6 +9,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { UserContext } from "./contexts/UserContext";
 import { useContext } from "react";
 
+const basename = "/frontend-react"; // Subpath
+
 function App() {
   const userContext = useContext(UserContext);
   if (!userContext) {
@@ -19,7 +21,7 @@ function App() {
 
   return (
     <>
-      <Router>
+      <Router basename={basename}>
         <NavigationBar />
         <main>
           <Routes>
