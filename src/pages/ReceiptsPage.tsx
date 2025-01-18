@@ -14,7 +14,7 @@ function ReceiptsPage() {
   const [groupNames, setGroupNames] = useState<string[] | []>([]);
 
   // State to store selected group names
-  const [selectedGroupName, setSelectedGroupName] = useState<string | null>("");
+  const [selectedGroupName, setSelectedGroupName] = useState<string>("");
 
   // State to store all receipt information in group
   const [receiptInfo, setReceiptInfo] = useState<ReceiptInfo[]>([]);
@@ -45,6 +45,7 @@ function ReceiptsPage() {
           groupLoaded={groupLoaded}
           receiptLoaded={receiptLoaded}
           setReceiptLoaded={setReceiptLoaded}
+          selectedReceiptID={selectedReceiptID}
           setSelectedReceiptID={setSelectedReceiptID}
         />
         <ReceiptUploader
@@ -75,7 +76,7 @@ function GroupSelector({
 }: {
   groupNames: string[];
   setGroupNames: React.Dispatch<React.SetStateAction<string[]>>;
-  setSelectedGroupName: React.Dispatch<React.SetStateAction<string | null>>;
+  setSelectedGroupName: React.Dispatch<React.SetStateAction<string>>;
   groupLoaded: boolean;
   setGroupLoaded: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedReceiptID: React.Dispatch<React.SetStateAction<number>>;
@@ -157,6 +158,7 @@ function ReceiptList({
   groupLoaded,
   receiptLoaded,
   setReceiptLoaded,
+  selectedReceiptID,
   setSelectedReceiptID,
 }: {
   selectedGroupName: string | null;
@@ -165,6 +167,7 @@ function ReceiptList({
   groupLoaded: boolean;
   receiptLoaded: boolean;
   setReceiptLoaded: React.Dispatch<SetStateAction<boolean>>;
+  selectedReceiptID: number;
   setSelectedReceiptID: React.Dispatch<SetStateAction<number>>;
 }) {
   // Async function to fetch and set receipt data
@@ -200,8 +203,12 @@ function ReceiptList({
     // Refresh upon successful deletion by toggling refresh
     if (status) {
       fetchReceiptData();
+      // If the receipt to be deleted is the currently selected, reset
+      if (receiptID === selectedReceiptID) {
+        setSelectedReceiptID(0);
+      }
     }
-    setReceiptLoaded(false);
+    setReceiptLoaded(true);
   };
 
   // Refetch data whenever a new group is chosen

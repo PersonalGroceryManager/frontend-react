@@ -14,7 +14,7 @@ function ReceiptEditorSaveButton({
 }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSave = async (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleSave = async () => {
     // Validate there is content
     if (DataModel.length === 0) {
       console.log("Attempted save with no content!");
@@ -42,14 +42,14 @@ function ReceiptEditorSaveButton({
 
     DataModel.forEach((row) => {
       // Calculate total selected units in this row
-      const totalSelectedUnits = Object.entries(row)
-        // Filter out non user ID column names
-        .filter(([colName, _]) => !isNaN(Number(colName)))
-        .reduce(
-          (rowSum, [_, userSelectedUnits]) =>
-            rowSum + (userSelectedUnits as number),
-          0
-        );
+      // const totalSelectedUnits = Object.entries(row)
+      //   // Filter out non user ID column names
+      //   .filter(([colName, _]) => !isNaN(Number(colName)))
+      //   .reduce(
+      //     (rowSum, [_, userSelectedUnits]) =>
+      //       rowSum + (userSelectedUnits as number),
+      //     0
+      //   );
 
       // Calculate total quantity available (either weight or quantity)
       const totalQuantity = row.quantity ?? row.weight;
@@ -77,8 +77,8 @@ function ReceiptEditorSaveButton({
       cost: cost.toFixed(2), // Format cost to 2 decimal places
     }));
 
-    const itemStatus = await updateUserItemQuanitity(UserQuantityModel);
-    const costStatus = await updateUserCost(UserCostModel);
+    await updateUserItemQuanitity(UserQuantityModel);
+    await updateUserCost(UserCostModel);
 
     setIsLoading(false);
   };

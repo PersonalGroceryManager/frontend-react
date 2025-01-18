@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { AgGridReact } from "ag-grid-react";
-import { AgGridEvent, ColDef, GridOptions } from "ag-grid-community";
+import { AgGridEvent, ColDef } from "ag-grid-community";
 import { ModuleRegistry, AllCommunityModule } from "ag-grid-community";
 import {
-  addUserToReceipt,
   fetchItemsInReceipts,
   fetchUserItemsInReceipt,
   ItemInfo,
@@ -34,7 +33,6 @@ function ReceiptEditor({
   const [userIDToNameMap, setUserIDToNameMap] = useState<
     Record<number, string>
   >({});
-  const [userIDsInReceipt, setUserIDsInReceipt] = useState<number[]>([]);
   const [usernamesNotInReceipt, setUsernamesNotInReceipt] = useState<string[]>(
     []
   );
@@ -44,10 +42,6 @@ function ReceiptEditor({
   const [rowData, setRowData] = useState<ItemInfo[] | []>([]); // Data Model
   const [colDefs, setColDefs] = useState<any[]>([]); // Column Definition
 
-  // AG Grid Configuration
-  const gridOptions = {
-    autoSizeColumns: true, // Will auto-size columns based on content
-  };
   const onGridReady = () => {
     if (gridRef.current) {
       gridRef.current.api.sizeColumnsToFit();
@@ -93,7 +87,6 @@ function ReceiptEditor({
           ),
         ];
         if (!userIDsWithItem) return;
-        setUserIDsInReceipt(userIDsWithItem);
         const usernamesWithItem: string[] = userIDsWithItem.map(
           (userID) => idToNameMap[userID]
         );
@@ -184,7 +177,6 @@ function ReceiptEditor({
               ref={gridRef}
               rowData={rowData}
               columnDefs={colDefs}
-              gridOptions={gridOptions}
               onGridReady={onGridReady}
               onCellValueChanged={onCellValueChanged}
             />
@@ -221,14 +213,14 @@ function calculateUserCost(DataModel: ItemInfo[]): Record<number, number> {
   const userCosts: { [userID: number]: number } = {};
   DataModel.forEach((row) => {
     // Calculate total selected units in this row
-    const totalSelectedUnits = Object.entries(row)
-      // Filter out non user ID column names
-      .filter(([colName, _]) => !isNaN(Number(colName)))
-      .reduce(
-        (rowSum, [_, userSelectedUnits]) =>
-          rowSum + (userSelectedUnits as number),
-        0
-      );
+    // const totalSelectedUnits = Object.entries(row)
+    //   // Filter out non user ID column names
+    //   .filter(([colName, _]) => !isNaN(Number(colName)))
+    //   .reduce(
+    //     (rowSum, [_, userSelectedUnits]) =>
+    //       rowSum + (userSelectedUnits as number),
+    //     0
+    //   );
 
     // Calculate total quantity available (either weight or quantity)
     const totalQuantity = row.quantity ?? row.weight;

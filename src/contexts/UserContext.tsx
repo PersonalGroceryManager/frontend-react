@@ -15,8 +15,14 @@ export function UserContextProvider(props: React.PropsWithChildren) {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
-    setIsLoggedIn(isAuthenticated());
-  }, []);
+    const checkAuthentication = async () => {
+      const isAuth = await isAuthenticated(); // Wait for the async function
+      setIsLoggedIn(isAuth); // Set the authentication status
+      console.log("Logged in? ", isAuth);
+    };
+
+    checkAuthentication();
+  }, []); // Only run once when the component is mounted
 
   const value: UserContextType = {
     isLoggedIn,

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { register } from "../../services/authService";
 import "./RegisterForm.css";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,9 @@ function RegisterForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [repeatedPassword, setRepeatedPassword] = useState("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const registerStatusIndicator = useRef<HTMLParagraphElement | null>(null);
 
   // Whether the username input cohere to regex
   const [validName, setValidName] = useState(false);
@@ -45,14 +48,26 @@ function RegisterForm() {
     // Prevent default form submission behaviour which refreshes page
     event.preventDefault();
 
+    setIsLoading(true);
     const status = await register(username, email, password);
 
     if (status) {
       navigate("/login");
-    } else {
-      console.log("Register failed.");
     }
+    // Registration failed - show a warning
+    else {
+      registerStatusIndicator.current?.classList.remove("offscreen");
+      registerStatusIndicator.current?.classList.add("warning");
+      console.error("Login Failed");
+    }
+    setIsLoading(false);
   }
+
+  // Remove the warning when user attempts to modify username, password or repeated password
+  useEffect(() => {
+    registerStatusIndicator.current?.classList.add("offscreen");
+    registerStatusIndicator.current?.classList.remove("warning");
+  }, [email, username, password, repeatedPassword]);
 
   return (
     <form id="register-form" onSubmit={handleSubmit}>
@@ -157,10 +172,25 @@ function RegisterForm() {
       <button
         type="submit"
         className="btn btn-primary"
-        disabled={!validName || !validPwd || !validMatch}
+        disabled={!validName || !validPwd || !validMatch || isLoading}
       >
-        Register
+        {isLoading ? (
+          <>
+            <span
+              className="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <span className="sr-only">Loading...</span>
+          </>
+        ) : (
+          "Register"
+        )}
       </button>
+      <p className="offscreen mt-2" ref={registerStatusIndicator}>
+        <i className="bi bi-exclamation-triangle-fill p-2"></i>Registration
+        failed. Please try again.
+      </p>
     </form>
   );
 }

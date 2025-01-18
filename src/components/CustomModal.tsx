@@ -1,4 +1,4 @@
-import React, { ReactNode, CSSProperties, forwardRef } from "react";
+import { ReactNode, CSSProperties, forwardRef } from "react";
 
 interface ModalProps {
   children: ReactNode; // Specifies that the component accepts nested elements

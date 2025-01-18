@@ -1,6 +1,8 @@
+import { jwtVerify } from "jose";
 import { jwtDecode } from "jwt-decode";
 
-const API_BASE_URL = "http://localhost:5000";
+const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
+const API_BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
 
 /**
  * Attempts to register a new user and navigate them to the login page if
@@ -113,10 +115,23 @@ export const getUserIDFromToken = () => {
 };
 
 // Function to check if the user is authenticated
-export const isAuthenticated = () => {
-  const token_available = !!getToken();
-  console.log("isAuthenticated: Does token exists? " + token_available);
-  return !!getToken(); // Returns true if a token exists, false otherwise
+export const isAuthenticated = async (): Promise<boolean> => {
+  const token = getToken();
+  if (!token) {
+    console.log("isAuthenticated: Token does not exist.");
+    return false;
+  }
+  console.log("isAuthenticated: Token exists.");
+
+  const encodedKey = new TextEncoder().encode(SECRET_KEY);
+  try {
+    const { payload } = await jwtVerify(token, encodedKey);
+    console.log("Token is valid:", payload);
+    return true;
+  } catch (err) {
+    console.log("Invalid token");
+    return false;
+  }
 };
 
 // Function to logout the user
