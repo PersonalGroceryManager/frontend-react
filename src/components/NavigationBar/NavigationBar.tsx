@@ -30,13 +30,13 @@ function NavigationBar() {
       <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <a className="nav-link" href="dashboard">
+            <a className="nav-link" href="#/dashboard">
               Dashboard
               {/* <span className="sr-only">(curre nt)</span> */}
             </a>
           </li>
           <li className="nav-item">
-            <a className="nav-link" href="receipts">
+            <a className="nav-link" href="#/receipts">
               Receipts
             </a>
           </li>

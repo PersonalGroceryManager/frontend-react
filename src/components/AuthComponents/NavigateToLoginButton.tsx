@@ -5,7 +5,7 @@ function NavigateToLoginButton() {
 
   const handleLoginButtonClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    navigate("/login");
+    navigate("#/login");
   };
 
   return (
