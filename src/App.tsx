@@ -12,7 +12,6 @@ import { UserContext } from "./contexts/UserContext";
 import { useContext } from "react";
 
 // const basename = "/frontend-react"; // Subpath for Browser Router
-const basename = "/";
 
 function App() {
   const userContext = useContext(UserContext);
@@ -24,7 +23,7 @@ function App() {
 
   return (
     <>
-      <Router basename={basename}>
+      <Router>
         <NavigationBar />
         <main>
           <Routes>
