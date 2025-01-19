@@ -15,6 +15,14 @@ function NavigationBar() {
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top px-3">
       <a className="navbar-brand" href="">
+        {/* NOTE: THIS PATH IS DELICATE */}
+        <img
+          src="/frontend-react/assets/grocery-icon.png"
+          width="30"
+          height="30"
+          alt="Grocery Icon"
+        />
+        {"   " /* For spacing */}
         Personal Grocery Manager
       </a>
       <button
