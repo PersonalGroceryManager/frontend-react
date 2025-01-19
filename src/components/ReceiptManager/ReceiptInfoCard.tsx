@@ -25,7 +25,8 @@ function ReceiptInfoCard({
         <h5 className="card-title px-3 pt-3">{slotTime}</h5>
         <div className="card-body">
           <p className="card-text text-muted">Order ID: {orderID}</p>
-          <a href="#" onClick={onSelect} className="btn btn-primary">
+          {/* Delicate path */}
+          <a onClick={onSelect} className="btn btn-primary">
             View
             <i
               id="view-icon"
