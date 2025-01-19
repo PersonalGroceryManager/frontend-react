@@ -11,7 +11,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { UserContext } from "./contexts/UserContext";
 import { useContext } from "react";
 
-const basename = "/frontend-react"; // Subpath
+// const basename = "/frontend-react"; // Subpath for Browser Router
+const basename = "/";
 
 function App() {
   const userContext = useContext(UserContext);
