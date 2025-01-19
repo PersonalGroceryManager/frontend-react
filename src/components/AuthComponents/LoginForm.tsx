@@ -17,7 +17,7 @@ function LoginForm() {
     throw new Error("App must be used within a UserContextProvider");
   }
 
-  const { setIsLoggedIn } = userContext;
+  const { isLoggedIn, setIsLoggedIn } = userContext;
 
   // Reset the warning message to offscreen whenever username and password is
   // modified
@@ -40,7 +40,6 @@ function LoginForm() {
     // Redirect to dashboard upon successful login
     if (status) {
       setIsLoggedIn(true);
-      navigate("/dashboard");
     } else {
       loginStatusIndicator.current?.classList.remove("offscreen");
       loginStatusIndicator.current?.classList.add("warning");
@@ -49,6 +48,13 @@ function LoginForm() {
 
     setIsLoading(false);
   };
+
+  // Within the LoginForm component
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/dashboard");
+    }
+  }, [isLoggedIn]);
 
   const handleRegisterLink = async (
     event: React.MouseEvent<HTMLAnchorElement>

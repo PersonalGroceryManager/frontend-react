@@ -83,6 +83,7 @@ function GroupSelector({
 }) {
   // Async function to fetch and set group data (Only run upon first load)
   const fetchGroupData = async () => {
+    setGroupLoaded(false);
     const groupData = await getGroupsJoinedByUser();
     const names = groupData.map((group) => group.group_name);
     setGroupNames(names);
@@ -179,9 +180,17 @@ function ReceiptList({
     }
 
     setReceiptLoaded(false);
-    const receiptData = await fetchReceiptsInGroup(selectedGroupName);
-    setReceiptInfo(receiptData);
-    setReceiptLoaded(true);
+    let receiptData: ReceiptInfo[] | [] = []; // Declare the variable outside
+    try {
+      receiptData = await fetchReceiptsInGroup(selectedGroupName);
+    } catch (err) {
+      console.log("Error when fetching receiptData: ", err);
+      receiptData = []; // Assign an empty array on error
+    } finally {
+      console.log("Finished fetching receiptData: ", receiptData);
+      setReceiptInfo(receiptData);
+      setReceiptLoaded(true);
+    }
   };
 
   // Set the receipt ID
