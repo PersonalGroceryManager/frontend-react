@@ -202,7 +202,9 @@ export const getUsernameFromID = async (
 };
 
 // Function to fetch user spending
-export const getUserSpending = async (): Promise<[Date[], number[]] | null> => {
+export const getUserSpending = async (): Promise<
+  { receipt_id: number; slot_time: Date; cost: number }[]
+> => {
   const request = new Request(API_BASE_URL + "/users/costs", {
     method: "GET",
     headers: {
@@ -212,13 +214,25 @@ export const getUserSpending = async (): Promise<[Date[], number[]] | null> => {
   });
   const response = await fetch(request);
   if (!response.ok) {
-    return null;
+    return [];
   }
-
   const data: { receipt_id: number; slot_time: string; cost: number }[] =
     await response.json();
-  const date = data.map((obj) => new Date(obj.slot_time));
-  const cost = data.map((obj) => obj.cost);
 
-  return [date, cost];
+  // Convert date string to date object and sort it
+  const formattedData: {
+    receipt_id: number;
+    slot_time: Date;
+    cost: number;
+  }[] = data
+    .map((entry) => ({
+      ...entry,
+      slot_time: new Date(entry.slot_time),
+    }))
+    .sort(
+      (a, b) =>
+        new Date(a.slot_time).getTime() - new Date(b.slot_time).getTime()
+    );
+
+  return formattedData;
 };

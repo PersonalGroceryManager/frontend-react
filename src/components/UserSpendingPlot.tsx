@@ -1,10 +1,19 @@
 import { useEffect, useState } from "react";
 import { getUserSpending } from "../services/authService";
-import Plot from "react-plotly.js"; // Import Plot from react-plotly.js
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  CartesianGrid,
+  Tooltip,
+  YAxis,
+} from "recharts";
 
 function UserSpendingPlot() {
-  const [dates, setDates] = useState<Date[]>([]);
-  const [costs, setCosts] = useState<number[]>([]);
+  const [costData, setCostData] = useState<
+    { receipt_id: number; slot_time: Date; cost: number }[]
+  >([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -12,13 +21,7 @@ function UserSpendingPlot() {
       setIsLoading(true);
       const result = await getUserSpending(); // Fetch user spending data
       if (result) {
-        const [dateData, costData] = result; // Destructure the returned array
-        setDates(dateData || []); // Fallback to empty array if dateData is null or undefined
-        setCosts(costData || []); // Fallback to empty array if costData is null or undefined
-      } else {
-        // Handle the case where result is null
-        setDates([]); // Default to empty array
-        setCosts([]); // Default to empty array
+        setCostData(result);
       }
       setIsLoading(false);
     };
@@ -33,34 +36,39 @@ function UserSpendingPlot() {
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
-      ) : !dates.length || !costs.length ? (
-        <p>No spending found</p>
       ) : (
         <div style={{ width: "100%", height: "500px" }}>
-          <Plot
-            data={[
-              {
-                x: dates, // x-axis: dates
-                y: costs, // y-axis: costs
-                type: "scatter", // Type of plot (line plot)
-                mode: "lines+markers", // Show lines and markers
-                marker: { color: "blue" }, // Set marker color
-              },
-            ]}
-            layout={{
-              xaxis: {
-                title: "Date", // x-axis label
-                type: "date", // Specify that the x-axis should treat values as dates
-              },
-              yaxis: {
-                title: "Cost (£)", // y-axis label
-              },
-            }}
-          />
+          <ResponsiveContainer>
+            <LineChart data={costData}>
+              <CartesianGrid
+                stroke="#ccc"
+                strokeDasharray="5 5"
+              ></CartesianGrid>
+              <Line dataKey="cost" stroke="#8884d8"></Line>
+              <XAxis dataKey="slot_time" tickFormatter={formatDate}></XAxis>
+              <YAxis tickFormatter={(value) => `£${value.toFixed(0)}`} />
+              <Tooltip formatter={(value: number) => `£${value.toFixed(2)}`} />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       )}
     </>
   );
 }
+
+// Date Format Function
+const formatDate = (isoString: string) => {
+  const date = new Date(isoString);
+  return date
+    .toLocaleString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false, // 24-hour format
+    })
+    .replace(",", ""); // Removes the comma between date and time
+};
 
 export default UserSpendingPlot;
