@@ -176,21 +176,14 @@ function ReceiptList({
     // Error handling
     if (!selectedGroupName) {
       console.log("Attempting to fetch receipt data without a selected group!");
+      setReceiptLoaded(true);
       return;
     }
 
     setReceiptLoaded(false);
-    let receiptData: ReceiptInfo[] | [] = []; // Declare the variable outside
-    try {
-      receiptData = await fetchReceiptsInGroup(selectedGroupName);
-    } catch (err) {
-      console.log("Error when fetching receiptData: ", err);
-      receiptData = []; // Assign an empty array on error
-    } finally {
-      console.log("Finished fetching receiptData: ", receiptData);
-      setReceiptInfo(receiptData);
-      setReceiptLoaded(true);
-    }
+    const receiptData = await fetchReceiptsInGroup(selectedGroupName);
+    setReceiptInfo(receiptData);
+    setReceiptLoaded(true);
   };
 
   // Set the receipt ID
@@ -223,7 +216,7 @@ function ReceiptList({
   // Refetch data whenever a new group is chosen
   useEffect(() => {
     fetchReceiptData();
-  }, [selectedGroupName]);
+  }, [groupLoaded]);
 
   // When groups or receipts are loading
   if (!groupLoaded || !receiptLoaded) {
