@@ -6,7 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import ReceiptsPage from "./pages/ReceiptsPage";
-import NavigationBar from "./components/NavigationBar/NavigationBar";
+import NavigationBar from "./components/NavigationBar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { UserContext } from "./contexts/UserContext";
 import { useContext } from "react";

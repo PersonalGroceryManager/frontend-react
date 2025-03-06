@@ -1,8 +1,7 @@
 import { useContext } from "react";
-import "./NavigationBar.css";
-import { UserContext } from "../../contexts/UserContext";
-import NavigateToLoginButton from "../AuthComponents/NavigateToLoginButton";
-import LogoutButton from "../AuthComponents/LogoutButton";
+import { UserContext } from "../contexts/UserContext";
+import NavigateToLoginButton from "./AuthComponents/NavigateToLoginButton";
+import LogoutButton from "./AuthComponents/LogoutButton";
 
 function NavigationBar() {
   const userContext = useContext(UserContext);
@@ -13,7 +12,7 @@ function NavigationBar() {
   const { isLoggedIn } = userContext;
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light fixed-top px-3">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-3 mb-3">
       <a className="navbar-brand" href="">
         {/* NOTE: THIS PATH IS DELICATE */}
         <img
@@ -28,14 +27,16 @@ function NavigationBar() {
       <button
         className="navbar-toggler"
         type="button"
-        aria-controls="navbarSupportedContent"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarContent"
+        aria-controls="navbarContent"
         aria-expanded="false"
         aria-label="Toggle navigation"
       >
         <span className="navbar-toggler-icon"></span>
       </button>
 
-      <div className="collapse navbar-collapse" id="navbarSupportedContent">
+      <div className="collapse navbar-collapse" id="navbarContent">
         <ul className="navbar-nav">
           <li className="nav-item">
             <a className="nav-link" href="#/dashboard">
