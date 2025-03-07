@@ -19,34 +19,37 @@ function ReceiptInfoCard({
   onSelect,
   onDelete,
 }: ReceiptInfoCardProps) {
+  // Function wrapper to prevent default refresh
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.preventDefault(); // Prevent default button click behavior
+    e.stopPropagation(); // Stop the click event from propagating to the parent (receipt card)
+    onDelete(); // Call the delete handler passed as prop
+  };
+
   return (
-    <div className="row mt-3">
-      <div className="card p-0" style={{ display: "block" }}>
-        <h5 className="card-title px-3 pt-3">{slotTime}</h5>
-        <div className="card-body">
-          <p className="card-text text-muted">Order ID: {orderID}</p>
-          {/* Delicate path */}
-          <a onClick={onSelect} className="btn btn-primary">
-            View
-            <i
-              id="view-icon"
-              className="bi bi-arrow-right-square-fill"
-              style={{ marginLeft: "1rem" }}
-            ></i>
-          </a>
-          <button
-            type="button"
-            onClick={onDelete}
-            className="btn btn-danger"
-            style={{ marginLeft: "1rem" }}
-          >
-            <i id="delete-icon" className="bi bi-x-square-fill" style={{}}></i>
-          </button>
-        </div>
-        <div className="card-footer">
-          <span className="text-muted">Paid by {paymentCard}</span>
-          <h5 style={{ textAlign: "right" }}>£ {totalPrice}</h5>
-        </div>
+    <div className="card receipt-card" onClick={onSelect}>
+      <button className="close-receipt-btn" onClick={handleDeleteClick}>
+        ×
+      </button>
+      <h5
+        className="card-title px-3 py-2"
+        style={{ backgroundColor: "#B2BEB5" }}
+      >
+        Sainsbury's
+      </h5>
+
+      <div
+        className="card-body"
+        id="receipt-info-area"
+        style={{ padding: "10px" }}
+      >
+        {/* Convert "Thu, 30 May 2024 12:00:00 GMT" to "30 May 2024" */}
+        {new Date(slotTime).toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })}
+        <h5 style={{ textAlign: "right" }}>£ {totalPrice}</h5>
       </div>
     </div>
   );

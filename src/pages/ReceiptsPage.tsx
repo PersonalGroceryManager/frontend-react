@@ -9,6 +9,9 @@ import {
 } from "../services/receiptService";
 import { getGroupsJoinedByUser } from "../services/groupService";
 
+// Style sheets
+import "./ReceiptsPage.css";
+
 function ReceiptsPage() {
   // State to store all available group names
   const [groupNames, setGroupNames] = useState<string[] | []>([]);
@@ -27,40 +30,43 @@ function ReceiptsPage() {
   const [receiptLoaded, setReceiptLoaded] = useState<boolean>(false);
 
   return (
-    <div className="row m-2">
-      <div className="col-6 col-sm-5 col-md-4 col-lg-3 col-xl-2">
-        <GroupSelector
-          groupNames={groupNames}
-          setGroupNames={setGroupNames}
-          setSelectedGroupName={setSelectedGroupName}
-          groupLoaded={groupLoaded}
-          setGroupLoaded={setGroupLoaded}
-          setSelectedReceiptID={setSelectedReceiptID}
-        />
-
-        <ReceiptList
-          selectedGroupName={selectedGroupName}
-          receiptInfo={receiptInfo}
-          setReceiptInfo={setReceiptInfo}
-          groupLoaded={groupLoaded}
-          receiptLoaded={receiptLoaded}
-          setReceiptLoaded={setReceiptLoaded}
-          selectedReceiptID={selectedReceiptID}
-          setSelectedReceiptID={setSelectedReceiptID}
-        />
-        <ReceiptUploader
-          selectedGroupName={selectedGroupName}
-          setReceiptLoaded={setReceiptLoaded}
-          setReceiptInfo={setReceiptInfo}
-        />
+    <>
+      <div className="container" id="receipt-page-container">
+        <div className="item" id="filters-area">
+          <GroupSelector
+            groupNames={groupNames}
+            setGroupNames={setGroupNames}
+            setSelectedGroupName={setSelectedGroupName}
+            groupLoaded={groupLoaded}
+            setGroupLoaded={setGroupLoaded}
+            setSelectedReceiptID={setSelectedReceiptID}
+          />
+          <ReceiptUploader
+            selectedGroupName={selectedGroupName}
+            setReceiptLoaded={setReceiptLoaded}
+            setReceiptInfo={setReceiptInfo}
+          />
+        </div>
+        <div className="item scroll-container-x" id="receipts-area">
+          <ReceiptList
+            selectedGroupName={selectedGroupName}
+            receiptInfo={receiptInfo}
+            setReceiptInfo={setReceiptInfo}
+            groupLoaded={groupLoaded}
+            receiptLoaded={receiptLoaded}
+            setReceiptLoaded={setReceiptLoaded}
+            selectedReceiptID={selectedReceiptID}
+            setSelectedReceiptID={setSelectedReceiptID}
+          />
+        </div>
+        <div className="item" id="receipt-editor-area">
+          <ReceiptEditor
+            selectedReceiptID={selectedReceiptID}
+            selectedGroupName={selectedGroupName}
+          />
+        </div>
       </div>
-      <div className="col">
-        <ReceiptEditor
-          selectedReceiptID={selectedReceiptID}
-          selectedGroupName={selectedGroupName}
-        />
-      </div>
-    </div>
+    </>
   );
 }
 
@@ -242,7 +248,7 @@ function ReceiptList({
   // If receipts are found within the group
   else {
     return (
-      <div className="card-group">
+      <>
         {receiptInfo.map((receiptObject) => {
           return (
             <ReceiptInfoCard
@@ -256,7 +262,7 @@ function ReceiptList({
             />
           );
         })}
-      </div>
+      </>
     );
   }
 }

@@ -1,0 +1,90 @@
+#example-text {
+  font-weight: 50;
+  font-size: 2rem;
+}
+
+#receipt-page-container {
+  display: grid;
+  width: 100%;
+  max-width: 100%;
+  grid-template-columns: 20% 80%;
+  grid-template-rows: 25vh 65vh;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
+#filters-area {
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 1;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#receipts-area {
+  /* Grid location*/
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  padding: 2px;
+
+  /* Border to highlight location */
+  border-color: black;
+  border-width: 5px;
+}
+
+.scroll-container-x {
+  overflow-x: auto;
+  white-space: nowrap;
+  scroll-snap-type: x mandatory;
+}
+
+.receipt-card {
+  display: inline-block;
+  width: 200px;
+  height: 80%;
+  min-height: 100px;
+  margin: 10px;
+  scroll-snap-align: start;
+}
+
+.receipt-card {
+  transition: 0.3s;
+}
+
+.receipt-card:hover {
+  transform: scale(1.1);
+}
+
+.receipt-card:active {
+  border-color: black;
+}
+
+#receipt-editor-area {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
+
+  padding: 10px;
+}
+
+.close-receipt-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 20px; /* Adjust size of X */
+  color: #000; /* Color of the X */
+  cursor: pointer;
+  margin-right: 5px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+  float: right;
+}
+
+.close-receipt-btn:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Hover effect */
+  color: red;
+}

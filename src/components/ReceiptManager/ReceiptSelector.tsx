@@ -47,7 +47,6 @@ function ReceiptSelector() {
   // Delete a receipt based on receipt ID
   // Function to be passed down to individual receipt items as props
   const handleReceiptDelete = async (receiptID: number) => {
-    //
     const status = await deleteReceiptFromGroup(receiptID);
 
     // Refresh upon successful deletion by toggling refresh
@@ -66,7 +65,7 @@ function ReceiptSelector() {
   }, [selectedGroupName, refreshReceipt]); // Set refresh receipt as a toggler
 
   return (
-    <div className="card-group">
+    <div>
       {receiptInfo ? (
         receiptInfo.map((receiptObject) => {
           return (
