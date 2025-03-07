@@ -28,7 +28,7 @@ function ReceiptsPage() {
 
   return (
     <div className="row m-2">
-      <div className="col-2">
+      <div className="col-6 col-sm-5 col-md-4 col-lg-3 col-xl-2">
         <GroupSelector
           groupNames={groupNames}
           setGroupNames={setGroupNames}
@@ -54,7 +54,7 @@ function ReceiptsPage() {
           setReceiptInfo={setReceiptInfo}
         />
       </div>
-      <div className="col-10">
+      <div className="col">
         <ReceiptEditor
           selectedReceiptID={selectedReceiptID}
           selectedGroupName={selectedGroupName}
