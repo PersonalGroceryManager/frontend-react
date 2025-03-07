@@ -12,10 +12,10 @@ type ReceiptInfoCardProps = {
 };
 
 function ReceiptInfoCard({
-  orderID,
+  // orderID,
   slotTime,
   totalPrice,
-  paymentCard,
+  // paymentCard,
   onSelect,
   onDelete,
 }: ReceiptInfoCardProps) {
