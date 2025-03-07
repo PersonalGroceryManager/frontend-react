@@ -91,6 +91,9 @@ function GroupManager() {
                     href="#"
                     className="list-group-item list-group-item-action py-3 lh-tight"
                     aria-current="true"
+                    onClick={(event) => {
+                      event.preventDefault();
+                    }}
                   >
                     <div className="d-flex w-100 align-items-center justify-content-between">
                       <strong className="mb-1">{group.group_name}</strong>
