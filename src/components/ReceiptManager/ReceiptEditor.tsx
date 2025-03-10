@@ -171,8 +171,26 @@ function ReceiptEditor({
           </div>
         </div>
       ) : (
-        <>
-          <div style={{ height: 500 }}>
+        <div className="row">
+          <div id="receipt-editor-results" className="col-2">
+            {userIDToNameMap &&
+              userCosts &&
+              Object.keys(userIDToNameMap).length > 0 &&
+              Object.keys(userCosts).length > 0 && (
+                <ReceiptUserCostDisplay
+                  userIDToNameMap={userIDToNameMap}
+                  userCosts={userCosts}
+                />
+              )}
+            <ReceiptEditorUserAdder
+              usernamesNotInReceipt={usernamesNotInReceipt}
+              setUsernamesNotInReceipt={setUsernamesNotInReceipt}
+              receiptID={selectedReceiptID}
+              refresh={refresh}
+              setRefresh={setRefresh}
+            />
+          </div>
+          <div id="receipt-editor-table" className="col-10">
             <AgGridReact
               ref={gridRef}
               rowData={rowData}
@@ -180,28 +198,12 @@ function ReceiptEditor({
               onGridReady={onGridReady}
               onCellValueChanged={onCellValueChanged}
             />
+            <ReceiptEditorSaveButton
+              DataModel={rowData}
+              receiptID={selectedReceiptID}
+            />
           </div>
-          {userIDToNameMap &&
-            userCosts &&
-            Object.keys(userIDToNameMap).length > 0 &&
-            Object.keys(userCosts).length > 0 && (
-              <ReceiptUserCostDisplay
-                userIDToNameMap={userIDToNameMap}
-                userCosts={userCosts}
-              />
-            )}
-          <ReceiptEditorSaveButton
-            DataModel={rowData}
-            receiptID={selectedReceiptID}
-          />
-          <ReceiptEditorUserAdder
-            usernamesNotInReceipt={usernamesNotInReceipt}
-            setUsernamesNotInReceipt={setUsernamesNotInReceipt}
-            receiptID={selectedReceiptID}
-            refresh={refresh}
-            setRefresh={setRefresh}
-          />
-        </>
+        </div>
       )}
     </>
   );

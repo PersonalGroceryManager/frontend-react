@@ -7,16 +7,14 @@ function ReceiptUserCostDisplay({
 }) {
   console.log(userIDToNameMap);
   return (
-    <div
-      className="d-flex flex-row"
-      style={{ justifyContent: "space-between" }}
-    >
+    <ul className="list-group">
       {Object.entries(userCosts).map(([userID, cost]) => (
-        <div key={userID}>
-          {userIDToNameMap[Number(userID)]}: £{cost.toFixed(2)}
-        </div>
+        <li className="list-group-item" key={userID}>
+          <p style={{ float: "left" }}>{userIDToNameMap[Number(userID)]}</p>
+          <h5 style={{ float: "right" }}>£{cost.toFixed(2)}</h5>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 

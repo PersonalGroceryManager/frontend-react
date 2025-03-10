@@ -8,7 +8,7 @@
   width: 100%;
   max-width: 100%;
   grid-template-columns: 20% 80%;
-  grid-template-rows: 25vh 65vh;
+  grid-template-rows: 20vh 70vh;
   margin: 0;
   padding: 0;
   overflow-y: auto;
@@ -70,6 +70,10 @@
   grid-row-end: 3;
 
   padding: 10px;
+}
+
+#receipt-editor-table {
+  height: 500px;
 }
 
 .close-receipt-btn {
