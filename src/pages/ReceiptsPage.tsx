@@ -222,7 +222,7 @@ function ReceiptList({
   // Refetch data whenever a new group is chosen
   useEffect(() => {
     fetchReceiptData();
-  }, [groupLoaded]);
+  }, [groupLoaded, selectedGroupName]);
 
   // When groups or receipts are loading
   if (!groupLoaded || !receiptLoaded) {
