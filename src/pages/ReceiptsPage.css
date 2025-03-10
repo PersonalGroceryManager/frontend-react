@@ -43,15 +43,15 @@
 }
 
 .receipt-card {
-  display: inline-block;
+  /* Overide bootstrap card with display: block */
+  display: inline-block !important;
+  position: relative;
+  /* Enable relative positioning for child */
   width: 200px;
   height: 80%;
   min-height: 100px;
   margin: 10px;
   scroll-snap-align: start;
-}
-
-.receipt-card {
   transition: 0.3s;
 }
 
@@ -81,7 +81,9 @@
   margin-right: 5px;
   border-radius: 50%;
   transition: background-color 0.3s ease;
+  position: absolute;
   float: right;
+  right: 0;
 }
 
 .close-receipt-btn:hover {
