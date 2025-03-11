@@ -15,8 +15,16 @@ function UserSpendingPlot() {
     { receipt_id: number; slot_time: Date; cost: number }[]
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [filterStartDate, setFilterStartDate] = useState<Date | null>(null);
-  const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
+
+  // By default, the date is set to the last 365 days
+  const currentDate: Date = new Date();
+  const lastYearDate: Date = new Date(
+    new Date().setFullYear(new Date().getFullYear() - 1)
+  );
+  const [filterStartDate, setFilterStartDate] = useState<Date | null>(
+    lastYearDate
+  );
+  const [filterEndDate, setFilterEndDate] = useState<Date | null>(currentDate);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,6 +91,7 @@ function UserSpendingPlot() {
                 id="cost-start-date"
                 onChange={handleStartDateChange}
                 value={filterStartDate?.toISOString().split("T")[0]}
+                max={filterEndDate?.toISOString().split("T")[0]}
               />
             </div>
             <div>
@@ -90,9 +99,10 @@ function UserSpendingPlot() {
               <input
                 type="date"
                 id="cost-end-date"
-                max={new Date().toISOString()}
                 onChange={handleEndDateChange}
                 value={filterEndDate?.toISOString().split("T")[0]}
+                min={filterStartDate?.toISOString().split("T")[0]}
+                max={new Date().toISOString().split("T")[0]}
               />
             </div>
           </section>
