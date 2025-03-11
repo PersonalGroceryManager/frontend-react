@@ -3,6 +3,8 @@ import React, { useState } from "react";
 interface ReceiptContext {
   refreshReceipt: boolean;
   setRefreshReceipt: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedGroupName: string;
+  setSelectedGroupName: React.Dispatch<React.SetStateAction<string>>;
   selectedReceiptID: number;
   setSelectedReceiptID: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -13,11 +15,14 @@ export const ReceiptContext = React.createContext<ReceiptContext | undefined>(
 
 export function ReceiptContextProvider(props: React.PropsWithChildren) {
   const [refreshReceipt, setRefreshReceipt] = useState<boolean>(false);
+  const [selectedGroupName, setSelectedGroupName] = useState<string>("");
   const [selectedReceiptID, setSelectedReceiptID] = useState<number>(0);
 
   const value: ReceiptContext = {
     refreshReceipt,
     setRefreshReceipt,
+    selectedGroupName,
+    setSelectedGroupName,
     selectedReceiptID,
     setSelectedReceiptID,
   };

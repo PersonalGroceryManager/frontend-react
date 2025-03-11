@@ -1,4 +1,5 @@
-import React, { useState, useEffect, SetStateAction } from "react";
+import React, { useState, useEffect, useContext, SetStateAction } from "react";
+import { ReceiptContext } from "../contexts/ReceiptContext";
 import ReceiptEditor from "../components/ReceiptManager/ReceiptEditor";
 import ReceiptUploader from "../components/ReceiptManager/ReceiptUploader";
 import ReceiptInfoCard from "../components/ReceiptManager/ReceiptInfoCard";
@@ -16,14 +17,23 @@ function ReceiptsPage() {
   // State to store all available group names
   const [groupNames, setGroupNames] = useState<string[] | []>([]);
 
-  // State to store selected group names
-  const [selectedGroupName, setSelectedGroupName] = useState<string>("");
-
   // State to store all receipt information in group
   const [receiptInfo, setReceiptInfo] = useState<ReceiptInfo[]>([]);
 
-  // State to store selected receipt (default to zero - no receipt selected)
-  const [selectedReceiptID, setSelectedReceiptID] = useState<number>(0);
+  // State to store selected group and receipt (default to zero - no receipt
+  // selected)
+  const receiptContext = useContext(ReceiptContext);
+  if (!receiptContext) {
+    throw new Error(
+      "ReceiptsPage must be wrapped within a receipt context provider!"
+    );
+  }
+  const {
+    selectedGroupName,
+    setSelectedGroupName,
+    selectedReceiptID,
+    setSelectedReceiptID,
+  } = receiptContext;
 
   // States to store loading information of each information
   const [groupLoaded, setGroupLoaded] = useState<boolean>(false);
@@ -36,6 +46,7 @@ function ReceiptsPage() {
           <GroupSelector
             groupNames={groupNames}
             setGroupNames={setGroupNames}
+            selectedGroupName={selectedGroupName}
             setSelectedGroupName={setSelectedGroupName}
             groupLoaded={groupLoaded}
             setGroupLoaded={setGroupLoaded}
@@ -75,6 +86,7 @@ export default ReceiptsPage;
 function GroupSelector({
   groupNames,
   setGroupNames,
+  selectedGroupName,
   setSelectedGroupName,
   groupLoaded,
   setGroupLoaded,
@@ -82,6 +94,7 @@ function GroupSelector({
 }: {
   groupNames: string[];
   setGroupNames: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedGroupName: string;
   setSelectedGroupName: React.Dispatch<React.SetStateAction<string>>;
   groupLoaded: boolean;
   setGroupLoaded: React.Dispatch<React.SetStateAction<boolean>>;
@@ -93,7 +106,13 @@ function GroupSelector({
     const groupData = await getGroupsJoinedByUser();
     const names = groupData.map((group) => group.group_name);
     setGroupNames(names);
-    setSelectedGroupName(names[0]); // Default to first group
+
+    // Default to first group if none was selected.
+    // Note: a group may be selected before entering receipts page by
+    // clicking on the list of groups on GroupManager
+    if (!selectedGroupName) {
+      setSelectedGroupName(names[0]);
+    }
     setGroupLoaded(true);
   };
   useEffect(() => {
@@ -147,6 +166,7 @@ function GroupSelector({
           setSelectedGroupName(event.target.value);
           setSelectedReceiptID(0); // Remove any selected receipt
         }}
+        value={selectedGroupName}
       >
         {groupNames.map((group, index) => (
           <option key={index} value={group}>

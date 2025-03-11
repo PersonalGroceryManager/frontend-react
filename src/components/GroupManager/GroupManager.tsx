@@ -1,11 +1,24 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { getGroupsJoinedByUser, GroupData } from "../../services/groupService";
+import { ReceiptContext } from "../../contexts/ReceiptContext";
 import GroupCreatorForm from "./GroupCreatorForm";
 import GroupJoinerForm from "./GroupJoinerForm";
 import CustomModal from "../CustomModal";
 import UserSpendingPlot from "../UserSpendingPlot";
+import { useNavigate } from "react-router-dom";
 
 function GroupManager() {
+  const receiptContext = useContext(ReceiptContext);
+  if (!receiptContext) {
+    throw new Error(
+      "Group Manager must be used within a ReceiptContextProvider"
+    );
+  }
+
+  const { setSelectedGroupName, setSelectedReceiptID } = receiptContext;
+
+  const navigate = useNavigate();
+
   // State to hold a list of group data
   const [groupData, setGroupData] = useState<GroupData[] | null>(null);
 
@@ -41,6 +54,23 @@ function GroupManager() {
       setFetchedGroups(true);
       closeModal();
     }
+  }
+
+  async function handleGroupSelect(event: React.MouseEvent<HTMLAnchorElement>) {
+    const selectedName: string | null =
+      event.currentTarget.getAttribute("data-key");
+
+    // Just required for type-safety: this string will not be empty
+    if (!selectedName) {
+      return;
+    }
+    setSelectedGroupName(selectedName);
+
+    // Forget about receipts (if any). Ensure no prior receipt chosen
+    setSelectedReceiptID(0);
+
+    // Navigate to receipts page after group is selected and receipt refreshed
+    navigate("/receipts");
   }
 
   // Fetch group data when the component mounts
@@ -89,13 +119,11 @@ function GroupManager() {
             {groupData && groupData.length > 0 ? (
               groupData.map((group) => (
                 <a
-                  href="#"
                   className="list-group-item list-group-item-action py-3 lh-tight"
                   aria-current="true"
                   key={group.group_name}
-                  onClick={(event) => {
-                    event.preventDefault();
-                  }}
+                  data-key={group.group_name}
+                  onClick={handleGroupSelect}
                 >
                   <div className="d-flex w-100 align-items-center justify-content-between">
                     <strong className="mb-1">{group.group_name}</strong>
