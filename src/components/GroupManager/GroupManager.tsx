@@ -92,6 +92,7 @@ function GroupManager() {
                   href="#"
                   className="list-group-item list-group-item-action py-3 lh-tight"
                   aria-current="true"
+                  key={group.group_name}
                   onClick={(event) => {
                     event.preventDefault();
                   }}
