@@ -40,44 +40,40 @@ function GroupJoinerForm({ onGroupJoin }: { onGroupJoin: () => void }) {
 
   return (
     <>
-      <form className="row">
-        <div className="col-auto">
-          <div className="form-floating mb-3">
-            <input
-              type="text"
-              className="form-control"
-              id="groupNameToJoin"
-              placeholder="Group Name"
-              onChange={(e) => {
-                setGroupName(e.target.value);
-              }}
-            />
-            <label htmlFor="groupNameToJoin">Group Name</label>
-          </div>
+      <form className="p-3">
+        <div className="form-floating mb-3">
+          <input
+            type="text"
+            className="form-control"
+            id="groupNameToJoin"
+            placeholder="Group Name"
+            onChange={(e) => {
+              setGroupName(e.target.value);
+            }}
+          />
+          <label htmlFor="groupNameToJoin">Group Name</label>
         </div>
-        <div className="col-auto">
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className="btn btn-primary mb-3"
-            disabled={!groupName || isLoading}
-          >
-            {isLoading ? (
-              <>
-                <span
-                  className="spinner-border spinner-border-sm"
-                  role="status"
-                  aria-hidden="true"
-                ></span>{" "}
-                Loading
-              </>
-            ) : (
-              "Join Group"
-            )}
-          </button>
-        </div>
+        <button
+          type="submit"
+          onClick={handleSubmit}
+          className="btn btn-primary mb-3"
+          disabled={!groupName || isLoading}
+        >
+          {isLoading ? (
+            <>
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>{" "}
+              Loading
+            </>
+          ) : (
+            "Join Group"
+          )}
+        </button>
       </form>
-      <p className="offscreen" ref={statusIndicator}>
+      <p className="offscreen mx-2" ref={statusIndicator}>
         <i className="bi bi-exclamation-triangle-fill p-2"></i>Join Group
         Failed. Please try again.
       </p>

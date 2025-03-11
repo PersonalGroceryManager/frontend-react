@@ -57,60 +57,62 @@ function GroupManager() {
   return (
     <>
       {/* Modal to join group */}
-      <CustomModal title="Create Group" id="exampleModal" ref={modalRef}>
+      <CustomModal title="Create/Join Group" id="group-modal" ref={modalRef}>
         <GroupCreatorForm onGroupAdded={fetchGroupData} />
+        <hr style={{ width: "90%", margin: "auto" }} />
+        <GroupJoinerForm onGroupJoin={fetchGroupData} />
       </CustomModal>
 
-      <div className="container-fluid">
-        <div className="row">
-          <div className="col-md-3 col-lg-2 d-flex flex-column align-items-stretch flex-shrink-0 bg-white">
-            <div className="list-group list-group-flush border-bottom scrollarea">
-              <a
-                href="/"
-                className="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
-              >
-                <span className="fs-5 fw-semibold">
-                  Groups {"  "}
-                  <button
-                    className="btn btn-light"
-                    data-bs-toggle="modal"
-                    data-bs-target="#exampleModal"
-                    onClick={(event) => {
-                      event.preventDefault();
-                    }}
-                  >
-                    <i className="bi bi-plus"></i>
-                  </button>
-                </span>
-                {/* Button to add groups */}
-              </a>
+      <div className="container-fluid row">
+        <div className="col-md-3 col-lg-2 d-flex flex-column align-items-stretch flex-shrink-0 bg-white">
+          <div className="list-group list-group-flush border-bottom scrollarea">
+            <a
+              href="/"
+              className="d-flex align-items-center flex-shrink-0 p-3 link-dark text-decoration-none border-bottom"
+            >
+              <span className="fs-5 fw-semibold">
+                Groups {"  "}
+                <button
+                  className="btn btn-light"
+                  data-bs-toggle="modal"
+                  data-bs-target="#group-modal"
+                  onClick={(event) => {
+                    event.preventDefault();
+                  }}
+                >
+                  <i className="bi bi-plus"></i>
+                </button>
+              </span>
+              {/* Button to add groups */}
+            </a>
 
-              {groupData && groupData.length > 0 ? (
-                groupData.map((group) => (
-                  <a
-                    href="#"
-                    className="list-group-item list-group-item-action py-3 lh-tight"
-                    aria-current="true"
-                    onClick={(event) => {
-                      event.preventDefault();
-                    }}
-                  >
-                    <div className="d-flex w-100 align-items-center justify-content-between">
-                      <strong className="mb-1">{group.group_name}</strong>
-                      {/* <small>Wed</small> */}
-                    </div>
-                    <div className="col-10 mb-1 small">{group.description}</div>
-                  </a>
-                ))
-              ) : (
-                <p>No groups found!</p>
-              )}
-            </div>
+            {groupData && groupData.length > 0 ? (
+              groupData.map((group) => (
+                <a
+                  href="#"
+                  className="list-group-item list-group-item-action py-3 lh-tight"
+                  aria-current="true"
+                  onClick={(event) => {
+                    event.preventDefault();
+                  }}
+                >
+                  <div className="d-flex w-100 align-items-center justify-content-between">
+                    <strong className="mb-1">{group.group_name}</strong>
+                    {/* <small>Wed</small> */}
+                  </div>
+                  <div className="col-10 mb-1 small">{group.description}</div>
+                </a>
+              ))
+            ) : (
+              <p>No groups found!</p>
+            )}
           </div>
-          <div className="col-md-9 col-lg-10">
-            <UserSpendingPlot />
-          </div>
-          <GroupJoinerForm onGroupJoin={fetchGroupData} />
+        </div>
+        <div
+          className="col-md-9 col-lg-10"
+          style={{ border: "1px solid #eeeae7" }}
+        >
+          <UserSpendingPlot />
         </div>
       </div>
     </>

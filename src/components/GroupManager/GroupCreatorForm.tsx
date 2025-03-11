@@ -97,7 +97,7 @@ function GroupCreatorForm({ onGroupAdded }: { onGroupAdded: () => void }) {
           </button>
         </div>
       </form>
-      <p className="offscreen" ref={statusIndicator}>
+      <p className="offscreen mx-2" ref={statusIndicator}>
         <i className="bi bi-exclamation-triangle-fill p-2"></i>Create Group
         Failed. Please try again.
       </p>
