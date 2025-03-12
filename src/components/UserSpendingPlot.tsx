@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { getUserSpending } from "../services/authService";
 import {
   ResponsiveContainer,
@@ -9,6 +9,8 @@ import {
   Tooltip,
   YAxis,
 } from "recharts";
+import { ReceiptContext } from "../contexts/ReceiptContext";
+import { useNavigate } from "react-router-dom";
 
 function UserSpendingPlot() {
   const [costData, setCostData] = useState<
@@ -60,6 +62,26 @@ function UserSpendingPlot() {
   const handleEndDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setFilterEndDate(e.target.valueAsDate);
+  };
+
+  // Route the user to the receipt
+  const receiptContext = useContext(ReceiptContext);
+  if (!receiptContext) {
+    throw new Error(__filename + " must be used within a ReceiptContext!");
+  }
+  const navigate = useNavigate();
+  const { setSelectedReceiptID } = receiptContext;
+  const handlePointClick = (event: any) => {
+    if (!event || !event.activePayload) {
+      return;
+    }
+
+    const clickedData = event.activePayload[0]?.payload;
+    if (clickedData) {
+      console.log("Point clicked! Data: ", clickedData);
+      setSelectedReceiptID(clickedData.receipt_id);
+      navigate("/receipts");
+    }
   };
 
   return (
@@ -157,7 +179,7 @@ function UserSpendingPlot() {
             }}
           >
             <ResponsiveContainer>
-              <LineChart data={costData}>
+              <LineChart data={costData} onClick={handlePointClick}>
                 <CartesianGrid
                   stroke="#ccc"
                   strokeDasharray="5 5"
