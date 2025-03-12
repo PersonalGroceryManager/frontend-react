@@ -93,8 +93,8 @@ function GroupManager() {
         <GroupJoinerForm onGroupJoin={fetchGroupData} />
       </CustomModal>
 
-      <div className="container-fluid row">
-        <div className="col-md-3 col-lg-2 d-flex flex-column align-items-stretch flex-shrink-0 bg-white">
+      <div className="f-container">
+        <div className="f-item" style={{ minWidth: "200px" }}>
           <div className="list-group list-group-flush border-bottom scrollarea">
             <a
               href="/"
@@ -137,10 +137,7 @@ function GroupManager() {
             )}
           </div>
         </div>
-        <div
-          className="col-md-9 col-lg-10"
-          style={{ border: "1px solid #eeeae7" }}
-        >
+        <div className="f-item">
           <UserSpendingPlot />
         </div>
       </div>

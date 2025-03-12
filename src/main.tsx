@@ -6,6 +6,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { UserContextProvider } from "./contexts/UserContext.tsx";
 import { ReceiptContextProvider } from "./contexts/ReceiptContext.tsx";
+import "./index.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

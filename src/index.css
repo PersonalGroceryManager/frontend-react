@@ -1,4 +1,4 @@
-:root {
+/* :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -64,5 +64,52 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+} */
+
+:root {
+  /* Color Schemes */
+  --primary-color: #c0caad;
+  --secondary-color: #3b5249;
+  --accent-color: #34252f;
+}
+
+.default-border {
+  border: 1px solid var(--accent-color);
+  border-radius: 15px;
+  padding-right: calc(var(--bs-gutter-x) * 0.5);
+  padding-left: calc(var(--bs-gutter-x) * 0.5);
+}
+
+.f-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Larger screens */
+@media (min-width: 992px) {
+  .f-container {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    height: 100%;
+  }
+
+  .f-container > .f-item {
+    height: 100%;
+  }
+}
+
+/* Smaller screens (portrait phones) */
+@media (max-width: 991px) {
+  .f-container {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+
+  .f-container > .f-item {
+    width: 100%;
+    height: auto;
   }
 }

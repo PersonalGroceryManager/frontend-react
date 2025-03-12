@@ -71,8 +71,9 @@ function UserSpendingPlot() {
           </div>
         </div>
       ) : (
-        <div style={{ display: "flex", padding: "10px", flexWrap: "wrap" }}>
+        <div className="f-container">
           <section
+            className="f-item"
             style={{
               backgroundColor: "ghostwhite",
               padding: "10px",
@@ -81,7 +82,7 @@ function UserSpendingPlot() {
               flex: "1",
             }}
           >
-            <h1 className="container" style={{ width: "100%" }}>
+            <h1 className="container" style={{ fontSize: "1.2rem" }}>
               Filters
             </h1>
             <div>
@@ -106,7 +107,17 @@ function UserSpendingPlot() {
               />
             </div>
           </section>
-          <div style={{ minWidth: "500px", height: "500px", flex: "4" }}>
+          <div
+            className="f-item"
+            style={{
+              minWidth: "300px",
+              minHeight: "300px",
+              height: "500px",
+              flexGrow: 3,
+              flexShrink: 1,
+              flexBasis: "500px",
+            }}
+          >
             <ResponsiveContainer>
               <LineChart data={costData}>
                 <CartesianGrid

@@ -36,6 +36,42 @@
   border-width: 5px;
 }
 
+#receipt-editor-area {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  grid-row-start: 2;
+  grid-row-end: 3;
+
+  padding: 10px;
+}
+
+/* Responsive grid system for smaller screens */
+@media (max-width: 991px) {
+  /* Change to a single column */
+  #receipt-page-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+  }
+
+  #filters-area {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+  }
+
+  #receipts-area {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+  }
+
+  #receipt-editor-area {
+    grid-column: 1;
+    grid-row: 3;
+    width: 100%;
+  }
+}
+
 .scroll-container-x {
   overflow-x: auto;
   white-space: nowrap;
@@ -61,15 +97,6 @@
 
 .receipt-card:active {
   border-color: black;
-}
-
-#receipt-editor-area {
-  grid-column-start: 1;
-  grid-column-end: 3;
-  grid-row-start: 2;
-  grid-row-end: 3;
-
-  padding: 10px;
 }
 
 #receipt-editor-table {
