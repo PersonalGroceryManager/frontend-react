@@ -71,7 +71,7 @@ button:focus-visible {
   /* Color Schemes */
   --primary-color: #c0caad;
   --secondary-color: #3b5249;
-  --accent-color: #34252f;
+  --accent-color: #d3c3cdda;
 }
 
 .default-border {
@@ -112,4 +112,18 @@ button:focus-visible {
     width: 100%;
     height: auto;
   }
+}
+
+input[type="date"] {
+  border: 2px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1rem;
+  background-color: #f9f9f9;
+}
+
+input[type="date"]:focus {
+  border-color: #0056b3;
+  outline: none;
+  background-color: #eaf7ff;
 }

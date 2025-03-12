@@ -71,41 +71,79 @@ function UserSpendingPlot() {
           </div>
         </div>
       ) : (
-        <div className="f-container">
+        <>
           <section
             className="f-item"
             style={{
-              backgroundColor: "ghostwhite",
               padding: "10px",
               display: "flex",
               flexWrap: "wrap",
               flex: "1",
             }}
           >
-            <h1 className="container" style={{ fontSize: "1.2rem" }}>
+            <h1
+              style={{
+                fontSize: "1.2rem",
+              }}
+            >
               Filters
             </h1>
-            <div>
-              <label htmlFor="cost-start-date">Start Date:</label>
-              <input
-                type="date"
-                id="cost-start-date"
-                onChange={handleStartDateChange}
-                value={filterStartDate?.toISOString().split("T")[0]}
-                max={filterEndDate?.toISOString().split("T")[0]}
-              />
-            </div>
-            <div>
-              <label htmlFor="cost-end-date">End Date:</label>
-              <input
-                type="date"
-                id="cost-end-date"
-                onChange={handleEndDateChange}
-                value={filterEndDate?.toISOString().split("T")[0]}
-                min={filterStartDate?.toISOString().split("T")[0]}
-                max={new Date().toISOString().split("T")[0]}
-              />
-            </div>
+            <hr style={{ width: "100%", marginTop: 0 }}></hr>
+
+            <fieldset
+              style={{
+                border: "none",
+                padding: "0",
+                display: "flex",
+                gap: "15px",
+                flexWrap: "wrap",
+              }}
+            >
+              <legend
+                style={{
+                  fontWeight: "bold",
+                  fontSize: "1rem",
+                  marginBottom: 0,
+                }}
+              >
+                Date Range
+              </legend>
+
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <label htmlFor="cost-start-date">Start Date:</label>
+                <input
+                  type="date"
+                  id="cost-start-date"
+                  onChange={handleStartDateChange}
+                  value={filterStartDate?.toISOString().split("T")[0]}
+                  max={filterEndDate?.toISOString().split("T")[0]}
+                  style={{
+                    padding: "8px",
+                    borderRadius: "5px",
+                    border: "1px solid #ccc",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <label htmlFor="cost-end-date">End Date:</label>
+                <input
+                  type="date"
+                  id="cost-end-date"
+                  onChange={handleEndDateChange}
+                  value={filterEndDate?.toISOString().split("T")[0]}
+                  min={filterStartDate?.toISOString().split("T")[0]}
+                  max={new Date().toISOString().split("T")[0]}
+                  style={{
+                    padding: "8px",
+                    borderRadius: "5px",
+                    border: "1px solid #ccc",
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+            </fieldset>
           </section>
           <div
             className="f-item"
@@ -133,7 +171,7 @@ function UserSpendingPlot() {
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </>
       )}
     </>
   );

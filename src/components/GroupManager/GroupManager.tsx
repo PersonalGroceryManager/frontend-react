@@ -94,7 +94,7 @@ function GroupManager() {
       </CustomModal>
 
       <div className="f-container">
-        <div className="f-item" style={{ minWidth: "200px" }}>
+        <div className="f-item default-border" style={{ minWidth: "200px" }}>
           <div className="list-group list-group-flush border-bottom scrollarea">
             <a
               href="/"
@@ -137,7 +137,7 @@ function GroupManager() {
             )}
           </div>
         </div>
-        <div className="f-item">
+        <div className="f-item f-container default-border">
           <UserSpendingPlot />
         </div>
       </div>
