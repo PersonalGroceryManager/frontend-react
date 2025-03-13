@@ -1,5 +1,6 @@
 import { getUserIDFromName } from "./authService";
 import { getGroupIDForName } from "./groupService";
+import { customFetch } from "./middleware";
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
 
@@ -54,7 +55,7 @@ export const fetchReceiptsInGroup = async (
       },
     });
 
-    const response = await fetch(request);
+    const response = await customFetch(request);
     if (!response.ok) {
       throw new Error(`Invalid response: ${response}`);
     }
@@ -82,7 +83,7 @@ export const fetchItemsInReceipts = async (receiptID: number) => {
   });
 
   try {
-    const response = await fetch(request);
+    const response = await customFetch(request);
     if (!response.ok) {
       throw new Error("");
     }
@@ -114,7 +115,7 @@ export async function fetchUserItemsInReceipt(
   );
 
   try {
-    const response = await fetch(request);
+    const response = await customFetch(request);
     if (!response.ok) throw new Error("");
     const userItemInfo = await response.json();
 
@@ -151,7 +152,7 @@ export const uploadReceiptToGroup = async (
     body: formData,
   });
 
-  const response = await fetch(request);
+  const response = await customFetch(request);
 
   if (!response.ok) {
     console.log("Upload receipt failed.");
@@ -177,7 +178,7 @@ export const deleteReceiptFromGroup = async (
     headers: { "Content-Type": "application/json" },
   });
 
-  const response = await fetch(request);
+  const response = await customFetch(request);
 
   if (!response.ok) {
     console.log("Failed to delete receipt.");
@@ -205,7 +206,7 @@ export const addUserToReceipt = async (
     }
   );
 
-  const response = await fetch(request);
+  const response = await customFetch(request);
 
   if (!response.ok) {
     console.log(
@@ -226,7 +227,7 @@ export const updateUserItemQuanitity = async (
     headers: { "Content-Type": "application/json" },
   });
 
-  const response = await fetch(request);
+  const response = await customFetch(request);
 
   if (!response.ok) {
     console.log("Failed to update user item quantity.");
@@ -249,7 +250,7 @@ export const updateUserCost = async (
     headers: { "Content-Type": "application/json" },
   });
 
-  const response = await fetch(request);
+  const response = await customFetch(request);
 
   if (!response.ok) {
     console.log("Failed to update user costs.");

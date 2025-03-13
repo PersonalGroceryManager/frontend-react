@@ -1,4 +1,5 @@
 import { getToken, getUserIDFromToken } from "./authService";
+import { customFetch } from "./middleware";
 
 const API_BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
 
@@ -17,7 +18,7 @@ export const getGroupIDForName = async (groupName: string): Promise<number> => {
     headers: { "Content-Type": "application/json" },
   });
 
-  const response = await fetch(request);
+  const response = await customFetch(request);
 
   if (!response.ok) {
     console.log("Group returned failed.");
@@ -49,7 +50,7 @@ export const getGroupsJoinedByUser = async (): Promise<GroupData[] | []> => {
   });
 
   try {
-    const response = await fetch(request);
+    const response = await customFetch(request);
 
     if (!response.ok) {
       console.log("Invalid response.");
@@ -89,7 +90,7 @@ export const joinGroup = async (groupName: string): Promise<boolean> => {
     }
   );
 
-  const response = await fetch(request);
+  const response = await customFetch(request);
 
   if (!response.ok) {
     return false;
@@ -116,7 +117,7 @@ export const createGroup = async (
     headers: { "Content-Type": "application/json" },
   });
 
-  const response = await fetch(request);
+  const response = await customFetch(request);
   if (!response.ok) {
     return false;
   }
@@ -139,7 +140,7 @@ export const getUsernamesInGroup = async (
     headers: { "Content-Type": "application/json" },
   });
 
-  const response = await fetch(request);
+  const response = await customFetch(request);
   if (!response.ok) {
     return [];
   }
@@ -173,7 +174,7 @@ export const getUserIDsInGroup = async (
     headers: { "Content-Type": "application/json" },
   });
 
-  const response = await fetch(request);
+  const response = await customFetch(request);
   if (!response.ok) {
     return [];
   }

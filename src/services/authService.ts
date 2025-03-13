@@ -1,5 +1,6 @@
 import { jwtVerify } from "jose";
 import { jwtDecode } from "jwt-decode";
+import { customFetch } from "./middleware";
 
 const SECRET_KEY = import.meta.env.VITE_SECRET_KEY;
 const API_BASE_URL = import.meta.env.VITE_BACKEND_API_URL;
@@ -74,14 +75,21 @@ export const login = async (username: string, password: string) => {
     const data = await response.json();
 
     // Response validation
-    if (!data || typeof data !== "object" || !("access_token" in data)) {
+    if (
+      !data ||
+      typeof data !== "object" ||
+      !("access_token" in data) ||
+      !("refresh_token" in data)
+    ) {
       throw new Error("Invalid response format: 'token' missing or malformed");
     }
 
     // Storing tokens in localStorage
     // TODO: Store with HTTP only for security
-    const token = data["access_token"];
-    localStorage.setItem("access_token", token);
+    const accessToken = data["access_token"];
+    const refreshToken = data["refresh_token"];
+    localStorage.setItem("access_token", accessToken);
+    localStorage.setItem("refresh_token", refreshToken);
     console.log("Logged in!");
 
     return true;
@@ -94,6 +102,49 @@ export const login = async (username: string, password: string) => {
 // Function to get the JWT token from localStorage
 export const getToken = () => {
   return localStorage.getItem("access_token");
+};
+
+// Function to get the refresh token from local storage
+export const getRefreshToken = () => {
+  return localStorage.getItem("refresh_token");
+};
+
+let refreshPromise: Promise<string> | null = null;
+export const refreshAccessToken = async (): Promise<boolean> => {
+  if (refreshPromise) {
+    console.log("Waiting for ongoing refresh...");
+    await refreshPromise; // Wait for the first refresh to complete
+    return true;
+  }
+
+  refreshPromise = (async () => {
+    try {
+      console.log("Refreshing token...");
+      const response = await fetch(`${API_BASE_URL}/users/refresh`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${getRefreshToken()}` },
+      });
+
+      if (!response.ok) throw new Error("Refresh failed");
+
+      const data = await response.json();
+      if (data.access_token) {
+        localStorage.setItem("access_token", data.access_token);
+        console.log("Token refresh successful!");
+        return data.access_token;
+      }
+
+      throw new Error("No access token in response");
+    } catch (err) {
+      console.error("Token refresh error:", err);
+      return "";
+    } finally {
+      refreshPromise = null; // Reset so future refreshes can happen
+    }
+  })();
+
+  await refreshPromise;
+  return !!getToken();
 };
 
 // Function to get the user ID from the token
@@ -144,10 +195,13 @@ export const getUserIDFromName = async (
   username: string
 ): Promise<number | null> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/users/resolve/${username}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await customFetch(
+      `${API_BASE_URL}/users/resolve/${username}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     if (!response.ok) {
       console.error(
@@ -175,10 +229,13 @@ export const getUsernameFromID = async (
   userID: number
 ): Promise<string | null> => {
   try {
-    const response = await fetch(`${API_BASE_URL}/users/resolve/${userID}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    });
+    const response = await customFetch(
+      `${API_BASE_URL}/users/resolve/${userID}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
 
     if (!response.ok) {
       console.error(
@@ -212,7 +269,7 @@ export const getUserSpending = async (): Promise<
       "Content-Type": "application/json",
     },
   });
-  const response = await fetch(request);
+  const response = await customFetch(request);
   if (!response.ok) {
     return [];
   }
