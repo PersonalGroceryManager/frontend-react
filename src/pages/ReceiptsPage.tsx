@@ -273,6 +273,7 @@ function ReceiptList({
           return (
             <ReceiptInfoCard
               key={receiptObject["receipt_id"]}
+              receiptID={receiptObject["receipt_id"]}
               orderID={receiptObject["order_id"]}
               slotTime={receiptObject["slot_time"]}
               totalPrice={receiptObject["total_price"]}
